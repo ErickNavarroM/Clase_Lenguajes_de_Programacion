@@ -15,8 +15,9 @@
   (if (empty? ls)
       '()
       (if (equal? (first ls) a)
-          (append (list b a) (insertL a b (rest ls)))
-          (append (list (first ls)) (insertL a b (rest ls))))))
+          (list (list b a) (insertL a b (rest ls)))
+          (list (first ls) (rest ls)))))
+;pendiente
                
 ;; 3
 (define (remv-1st a ls)
@@ -58,17 +59,18 @@
  ; homogenizar nombramientos
 
 ;; 8
-(define (append ls1 ls2)
-  (if (empty? ls2)
-      ls1
-      (list* (list ls1) ls2)))
+;(define (append ls1 ls2)
+ ; (if (empty? ls2)
+  ;    ls1
+   ;   (list* ls1 (first ls2))))
   ;pendiente
 
 ;; 9
 (define (reverse ls)
   (if (empty? ls)
       '()
-      (append (reverse (rest ls)) (list (first ls)))))
+      (list (reverse (rest ls)) (first ls))))
+; corregir presentación de salida (reverse '(a b c d e))
 
 ;; 10
 (define (repeat ls n)
@@ -87,8 +89,6 @@
       0
       (+ (* (first ls) (expt 2 0)) (* 2 (binary->natural (rest ls))))))
 
-;; (binary->natural '(0 0 1 0 1 1 0 0))
-
 ;; 14
 (define (div dividendo divisor)
   (cond
@@ -96,6 +96,7 @@
     [(< dividendo 0) (error "División no exacta.")]
     [(> dividendo 0) (+ 1 (div (- dividendo divisor) divisor))]))
 
+;; (binary->natural '(0 0 1 0 1 1 0 0))
 
 ;(define (append-map proc ls)
  ; (
@@ -104,13 +105,5 @@
 (define (powerset ls)
   (if (empty? ls)
       (list ls)
-      (let ([x (powerset (rest ls))])
-        (append (map (lambda (n) (cons (first ls) n)) x) x))))
-      ;(append (map (lambda (n) (cons (first ls) n)) (powerset (rest ls))) (powerset (rest ls)))))
-      ;(append (map (lambda (n) (cons 3 n)) ls) ls)))
-      ;(map (lambda (n) (cons (first ls) n)) (powerset (rest ls)))))
-      ;(map (lambda (n) (cons 3 n)) ls)))
-      ;(cons (list (first ls)) (list (rest ls))))) ;a
-      ;(cons (list 42 (first ls)) (powerset (rest ls)))))
-; (powerset '((2 1) (2) (1) ()))
+      (list (list 42 (first ls)) (powerset (rest ls)))))
 (provide (all-defined-out))
