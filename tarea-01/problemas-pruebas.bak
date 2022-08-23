@@ -63,7 +63,7 @@
     (check-true (same-lists* '((a) b (c d) d) '((a) b (c d) d))))
 
   (test-case "12"
-    (check-equal? '((w.(x.())).(y.((z.()).()))) '((w x) y (z))))
+    (check-equal? '((w.(x.())).(y.((z.()).()))) '((w x) y (z)))
   
   (test-case "binary->natural"
     (check-eqv? (binary->natural '()) 0)

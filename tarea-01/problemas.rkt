@@ -28,10 +28,10 @@
 ; Test () (x) (a) (x a) (a x) (a a x a) (a x a x x)
 
 ;; 4
-(define (test proc ls)
+(define (map proc ls)
   (if (empty? ls)
       '()
-      (list* (proc (first ls)) (test proc (rest ls)))))
+      (cons (proc (first ls)) (map proc (rest ls)))))
 
 ;; 5
 (define (filter pred ls)
@@ -59,10 +59,10 @@
 
 ;; 8
 (define (append ls1 ls2)
-  (if (empty? ls2)
-      ls1
-      (list* (list ls1) ls2)))
-  ;pendiente
+  (if (empty? ls1)
+      ls2
+      (cons (first ls1) (append (rest ls1) ls2))))
+ 
 
 ;; 9
 (define (reverse ls)
@@ -96,9 +96,31 @@
     [(< dividendo 0) (error "División no exacta.")]
     [(> dividendo 0) (+ 1 (div (- dividendo divisor) divisor))]))
 
+;; 15
+(define (append-map proc ls)
+  (if (empty? ls)
+      '()
+      (append (proc (first ls)) (append-map proc (rest ls)))))
 
-;(define (append-map proc ls)
- ; (
+;; 16
+(define (set-difference ls1 ls2)
+  (if (empty? ls1)
+      '()
+      (if (ormap (lambda (n) (eq? n (first ls1))) ls2)
+          (set-difference (rest ls1) ls2)
+          (cons (first ls1) (set-difference (rest ls1) ls2)))))
+;(set-difference '(1 2 3 4) '(1 9 3 5 6))
+;(set-difference '(1 2 3 4 11 9) '(1 9 3 5 6))
+;(set-difference '(1 2 3 4) '())
+;(set-difference '() '(1 9 3 5 6))
+;(set-difference '() '())
+
+;; 17
+(define (foldr proc init ls)
+  (if (empty? ls)
+      init
+      (proc (first ls) (foldr proc init (rest ls)))))
+  
 
 ;; 18
 (define (powerset ls)
@@ -113,4 +135,104 @@
       ;(cons (list (first ls)) (list (rest ls))))) ;a
       ;(cons (list 42 (first ls)) (powerset (rest ls)))))
 ; (powerset '((2 1) (2) (1) ()))
+
+;; 19
+(define (cartesian-product ls)
+  (if (or (empty? (first ls)) (empty? (second ls)))
+      '()
+      (append (map (lambda (n) (list (first (first ls)) n)) (second ls)) (cartesian-product (list (rest (first ls)) (second ls))))))
+
+#|(define (cartesian-product ls1 ls2)
+  (if (or (empty? ls1)) (empty? ls2))
+      '()
+      (append (map (lambda (n) (list (first ls1) n)) ls2) (cartesian-product (rest ls1) ls2)))
+(define (cartesian-product ls)
+  (if (or (empty? (car ls)) (empty? (cdr ls)))
+      '()
+      (append (map (lambda (n) (list (first (car ls)) n)) (cdr ls)) (cartesian-product (list (rest (car ls)) (cdr ls))))))|#
+;; 20 (foldr)
+;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+#|(define (foldr proc init ls)
+  (if (empty? ls)
+      init
+      (proc (first ls) (foldr proc init (rest ls)))))
+|#
+
+(define (insertL-fr a b ls)
+  (foldr (lambda (x y)
+           (if (equal? x a)
+               (cons b (cons a y))
+               (cons x y)))
+           null
+           ls))
+
+(define (filter-fr pred ls)
+  (foldr (lambda (x y)
+           (if (pred x)
+               (cons x y)
+               y))
+         null
+         ls))
+
+(define (map-fr proc ls)
+  (foldr (lambda (x y)
+           (cons (proc x) y))
+         null
+         ls))
+#|
+(define (map proc ls)
+  (if (empty? ls)
+      '()
+      (cons (proc (first ls)) (map proc (rest ls)))))
+
+(define (append-fr ))
+
+(define (reverse-fr ))
+
+(define (insertL-fr ))
+
+(define (insertL-fr ))
+
+(define (insertL-fr ))
+
+(define (insertL-fr ))|#
+
+;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+;; 21
+#|#(define (snowball n)
+  (if (equal? n 0)
+      0
+      (if (equal? 0 (modulo n 2))
+          (snowball (/ n 2))
+          (snowball (+ (* 3 n) 1)))))|#
+ 
+(define snowball
+    (letrec
+        ((odd-case
+          (lambda (fix-odd)
+            (lambda (x)
+              (cond
+                ((and (exact-integer? x) (positive? x) (odd? x))
+                 (snowball (add1 (* x 3))))
+                (else (fix-odd x))))))
+         (even-case
+          (lambda (fix-even)
+            (lambda (x)
+              (cond
+                ((and (exact-integer? x) (positive? x) (even? x))
+                 (snowball (/ x 2)))
+                (else (fix-even x))))))
+         (one-case
+          (lambda (fix-one)
+            (lambda (x)
+              (cond
+                ((zero? (sub1 x)) 1)
+                (else (fix-one x))))))
+         (base
+          (lambda (x)
+            (snowball (error 'error "Invalid value ~s~n" x)))))
+      (one-case (odd-case (even-case base)))))
+
 (provide (all-defined-out))
