@@ -25,7 +25,6 @@
       (if (eqv? (first ls) a)
           (rest ls)
           (list* (first ls) (remv-1st a (rest ls))))))
-; Test () (x) (a) (x a) (a x) (a a x a) (a x a x x)
 
 ;; 4
 (define (map proc ls)
@@ -48,14 +47,12 @@
       (list* (cons (first ls1) (first ls2)) (zip (rest ls1) (rest ls2)))))
 
 ;; 7
-(define (list-index-ofv sym ls)
+(define (list-index-ofv sym ls [lgth (length ls)])
   (if (empty? ls)
       -1
       (if (eqv? (first ls) sym)
           0
           (+ 1 (list-index-ofv sym (rest ls))))))
-
- ; homogenizar nombramientos
 
 ;; 8
 (define (append ls1 ls2)
@@ -72,22 +69,20 @@
 
 ;; 10
 (define (repeat ls n)
-  (if (equal? n 1)
-      ls
-      (list* ls (repeat ls (- n 1)))))
+  (if (< n 1)
+      '()
+      (append ls (repeat ls (- n 1)))))
 ; corregir presentación de salida (repeat '(a b c d e) 3)
 
 ;; 11
 (define (same-lists* ls1 ls2)
-  (if (eqv? ls1 ls2) #t #f))
+  (if (equal? ls1 ls2) #t #f))
 
 ;; 13
 (define (binary->natural ls)
   (if (empty? ls)
       0
       (+ (* (first ls) (expt 2 0)) (* 2 (binary->natural (rest ls))))))
-
-;; (binary->natural '(0 0 1 0 1 1 0 0))
 
 ;; 14
 (define (div dividendo divisor)
@@ -100,7 +95,9 @@
 (define (append-map proc ls)
   (if (empty? ls)
       '()
-      (append (proc (first ls)) (append-map proc (rest ls)))))
+      (if (list? (proc (first ls)))
+          (append (proc (first ls)) (append-map proc (rest ls)))
+          (append (list (proc (first ls))) (append-map proc (rest ls))))))
 
 ;; 16
 (define (set-difference ls1 ls2)
@@ -180,11 +177,8 @@
            (cons (proc x) y))
          null
          ls))
+
 #|
-(define (map proc ls)
-  (if (empty? ls)
-      '()
-      (cons (proc (first ls)) (map proc (rest ls)))))
 
 (define (append-fr ))
 
