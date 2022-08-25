@@ -213,7 +213,7 @@
   
   (test-case "snowball"
     (let ((ns (make-base-namespace)))
-      (check-equal? (eval quine ns) quine)
-      (check-equal? (eval (eval quine ns) ns) quine))))
+      (check-equal? #t #f)
+      (check-equal? #t #f))))
 
 (run-tests pruebas 'verbose)

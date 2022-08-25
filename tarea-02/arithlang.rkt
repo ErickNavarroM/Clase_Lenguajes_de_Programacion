@@ -1,13 +1,28 @@
 #lang plait
 
 ;; Problema 1
-(define (parse [s : S-Exp]) : ArithC
+(define-type Expr
+  (num [n : Number])
+  (plusC [m : Expr][n : Expr])
+  (multC [m : Expr][n : Expr]))
+
+(define-type ArithC
+  ()
+  
+
+(define (parse [s : S-Exp]) : ArithS
   (cond [(s-exp-number? s) (numC (s-exp->number s))]
         [(s-exp-list? s)
          (let ([ls (s-exp->list s)])
            (case (s-exp->symbol (first ls))
-             [(+) (plusC (parse (second ls)) (parse (third ls)))]
-             [(*) (multC (parse (second ls)) (parse (third ls)))]
+             [(+) (plusS (parse (second ls)) (parse (third ls)))]
+             [(*) (multS (parse (second ls)) (parse (third ls)))]
+             [(-) (bminusS (parse (second ls)) (parse (third ls)))]
+             [(-) (uminusS (parse (second ls)))]
+             [(not) (negS (parse (second ls)))]
+             [(or) (disjS (parse (second ls)) (parse (third ls)))]
+             [(and) (conjS (parse (second ls)) (parse (third ls)))]
+             [(if) (condS (parse (second ls)) (parse (third ls)) (parse (fourth ls)))]
              [else (error 'parse ”operación aritmética malformada”)]))]
         [else (error 'parse ”expresión aritmética malformada”)]))
 
