@@ -1,56 +1,37 @@
 #lang plait
 
-(require rackunit
-         rackunit/text-ui
-         "problemas.rkt")
+(require "arithlang.rkt")
+; ` > <
 
-(define-test-suite pruebas
-;; Problema 1
-  (test-case
+;Num Tests
+(test (eval `8) 8)
 
-;; Problema 2
-  (test-case 
+(test (eval `-9) -9)
 
-;; Problema 3
-  (test-case 
+;Plus Tests
+(test (eval `(+ 5 8)) 13)
 
-;; Problema 4
+(test (eval `(+ -30 7)) -23)
 
-;; Problema 5
+(test (eval `(+ -6 -11)) -17)
 
-;; Problema 6
+;Mult Tests
+(test (eval `(* 4 3)) 12)
 
-;; Problema 7
+(test (eval `(* -3 11)) -33)
 
-;; Problema 8
+(test (eval `(* 0 127)) 0)
 
-;; Problema 9
+;BMinus Tests
+(test (eval `(- 7 4)) 3)
 
-;; Problema 10
+(test (eval `(- -23 9)) -32)
 
-;; Problema 11
+(test (eval `(- 6 -13)) 19)
 
-;; Problema 12
+;UMinus Tests
+(test (eval `(- 37)) -37)
 
-;; Problema 13
+(test (eval `(- 15)) -15)
 
-;; Problema 14
-
-;; Problema 15
-
-;; Problema 16
-
-;; Problema 17
-
-;; Problema 18
-
-;; Problema 19
-
-;; Problema 20
-
-;; Problema 21
-
-;; Problema 22
-
-;; Problema 23
-
+(test (eval `(- -8)) 8)
