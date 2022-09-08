@@ -1,63 +1,45 @@
+
 #lang plait
 
 ;; Problema 1
-(define (parse [s : S-Exp]) : ArithC
-  (cond [(s-exp-number? s) (numC (s-exp->number s))]
+(define (interp [c : ArithC]) : Number
+  (type-case ArithC c
+    [(numC n) n]
+    [(plusC n m) (+ (interp n) (interp m))]
+    [(multC n m) (* (interp n) (interp m))]))
+
+(define-type ArithC
+  (numC [n : Number])
+  (plusC [n : ArithC] [m : ArithC])
+  (multC [n : ArithC] [m : ArithC]))
+
+(define (desugar [s : ArithS]) : ArithC
+  (type-case ArithS s
+    [(numS n) (numC n)]
+    [(plusS n m) (plusC (desugar n) (desugar m))]
+    [(multS n m) (multC (desugar n) (desugar m))]
+    [(bminusS n m) (plusC (desugar n) (multC (numC -1) (desugar m)))]
+    [(uminusS n) (multC (numC -1) (desugar n))]))
+
+(define-type ArithS
+  (numS [n : Number])
+  (plusS [n : ArithS] [m : ArithS])
+  (multS [n : ArithS] [m : ArithS])
+  (bminusS [n : ArithS] [m : ArithS])
+  (uminusS [n : ArithS]))
+
+(define (parse [s : S-Exp]) : ArithS
+  (cond [(s-exp-number? s) (numS (s-exp->number s))]
         [(s-exp-list? s)
          (let ([ls (s-exp->list s)])
-           (case (s-exp->symbol (first ls))
-             [(+) (plusC (parse (second ls)) (parse (third ls)))]
-             [(*) (multC (parse (second ls)) (parse (third ls)))]
-             [else (error 'parse ”operación aritmética malformada”)]))]
-        [else (error 'parse ”expresión aritmética malformada”)]))
-
-(define (desugar) 5)
-
-(define (interp) 6)
+           (if (equal? (length ls) 2)
+               (uminusS (parse (second ls)))
+               (case (s-exp->symbol (first ls))
+                 [(+) (plusS (parse (second ls)) (parse (third ls)))]
+                 [(*) (multS (parse (second ls)) (parse (third ls)))]
+                 [(-) (bminusS (parse (second ls)) (parse (third ls)))]
+                 [else (error 'parse "operación aritmética malformada")])))]
+        [else (error 'parse "expresión aritmética malformada")]))
 
 (define (eval [input : S-Exp]) : Number
   (interp (desugar (parse input))))
-
-;; Problema 2
-
-;; Problema 3
-
-;; Problema 4
-
-;; Problema 5
-
-;; Problema 6
-
-;; Problema 7
-
-;; Problema 8
-
-;; Problema 9
-
-;; Problema 10
-
-;; Problema 11
-
-;; Problema 12
-
-;; Problema 13
-
-;; Problema 14
-
-;; Problema 15
-
-;; Problema 16
-
-;; Problema 17
-
-;; Problema 18
-
-;; Problema 19
-
-;; Problema 20
-
-;; Problema 21
-
-;; Problema 22
-
-;; Problema 23
