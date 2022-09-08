@@ -1,16 +1,3 @@
-<<<<<<< HEAD
-#lang plait
-
-(define (is-odd? x)
-  (if (zero? x)
-      #f
-      (is-even? (- x 1))))
- 
-(define (is-even? x)
-  (if (zero? x)
-      #t
-      (is-odd? (- x 1))))
-=======
 
 #lang racket
 (require racket/trace
@@ -41,16 +28,19 @@
       
       
 ;; Problema 3
+;; take : (listof Symbol?) Number? -> (listof String)
 (define (take ls n)
   (if (or (empty? ls) (= n 0))
       '()
       (cons (first ls) (take (rest ls) (sub1 n)))))
 
+;; drop : (listof Symbol?) Number? -> (listof String)
 (define (drop ls n)
   (if (or (empty? ls) (= n 0))
       ls
       (drop (rest ls) (sub1 n))))
 
+;; Problema 4
 (define (bundle2 s n)
   (cond
     [(null? s) null]
@@ -58,12 +48,8 @@
      (cons (implode (take s n))
            (bundle2 (drop s n) n))]))
 
-;; Problema 4
-
-;; Problema 5
-
 ;; Problema 6
-
+;; list->chunks : (listof Symbol?) Number? -> (listof String)
 (define (list->chunks ls n)
   (if (empty? ls)
       '()
@@ -73,15 +59,16 @@
   (map implode (list->chunks ls n)))
 
 ;; Problema 7
-
+;; partition : (listof Symbol?) Number? -> (listof String)
 (define (partition s n)
   (if (empty? s)
       #t
-      (if (< (string-length s) n)
+      (if (<= (string-length s) n)
           (cons (substring s 0 (string-length s)) '())
           (cons (substring s 0 n) (partition (substring s n (string-length s)) n)))))
 
 ;; Problema 8
+;; isort : (listof Number?) Boolean? -> (listof Number)
 (define (isort ls asc?)
   (let ([x (if (empty? ls)
       null
@@ -107,6 +94,7 @@
              (equals ls pivot)
              (quicksort (largers ls pivot)))]))
 
+;; smallers : (listof Number?) Number? -> (listof Number)
 (define (smallers ls pivot)
   (if (empty? ls)
       '()
@@ -114,6 +102,7 @@
           (cons (first ls) (smallers (rest ls) pivot))
           (smallers (rest ls) pivot))))
 
+;; largers : (listof Number?) Number? -> (listof Number)
 (define (largers ls pivot)
   (if (empty? ls)
       '()
@@ -121,8 +110,8 @@
           (cons (first ls) (largers (rest ls) pivot))
           (largers (rest ls) pivot))))
 
-;; Problema 11 pendiente
-
+;; Problema 11
+;; equals : (listof Number?) Number? -> (listof Number)
 (define (equals ls pivot)
   (if (empty? ls)
       '()
@@ -131,6 +120,7 @@
           (equals (rest ls) pivot))))
 
 ;; Problema 12
+;; qsort : (listof Number?) Boolean? -> (listof Number)
 (define (qsort ls asc?)
   (let ([x (cond
     [(empty? ls) null]
@@ -144,20 +134,23 @@
         (reverse x))))
 
 ;; Problema 13
+;; bothsort : (listof Number?) Boolean? -> (listof Number)
 (define (bothsort ls asc?)
-  (if (> (length ls) 5)
+  (if (> (length ls) 1200)
       (qsort ls asc?)
       (isort ls asc?)))
 
 ;; Problema 14
-
+;; smallers2 : (listof Number?) Number? -> (listof Number)
 (define (smallers2 ls pivot)
   (filter (lambda (n) (< n pivot)) ls))
 
+;; largers2 : (listof Number?) Number? -> (listof Number)
 (define (largers2 ls pivot)
   (filter (lambda (n) (> n pivot)) ls))
 
 ;; Problema 15
+;; quicksort2 : (listof Number?) -> (listof Number)
 (define (quicksort2 ls)
   (cond
     [(empty? ls) null]
@@ -167,11 +160,23 @@
              (filter (lambda (n) (= n pivot)) ls)
              (quicksort (filter (lambda (n) (> n pivot)) ls)))]))
 
-;; Problema 16
-
 ;; Problema 17
+(define (bundle4 s n)
+  (cond
+    [(= n 0) (error "Argumento no válido.")]
+    [(null? s) null]
+    [else
+     (cons (implode (take s n))
+           (bundle4 (drop s n) n))]))
 
 ;; Problema 18
+
+(define (smallers3 l n)
+  (cond
+    [(empty? l) '()]
+    [else (if (<= (first l) n)
+              (cons (first l) (smallers (rest l) n))
+              (smallers (rest l) n))]))
 
 ;; Problema 19
 
@@ -191,17 +196,15 @@
         (find-largest-divisor min (remainder max min))))
   (find-largest-divisor (max n m) (min n m)))
 
-;; Problema 21
-
-;; Problema 22
-
 ;; Problema 23
+;; spki-carpet : Number? -> Pict
 (define (spki-carpet side)
   (cond [(<= side 4) (square side 1 "red")]
         [else
          (define half (spki-carpet (/ side 3)))
          (vc-append (hc-append half half half) (hb-append (vc-append half half) half (vc-append half half)))]))
 
+;; square : Number? Number? String? -> Pict
 (define (square side width color)
   (define w side)
   (define h side)
@@ -222,4 +225,5 @@
     (send ctx draw-path path dx dy)
     (send ctx set-pen prev-pen))
   (dc draw-it w h))
->>>>>>> workprocess
+
+(provide (all-defined-out))
