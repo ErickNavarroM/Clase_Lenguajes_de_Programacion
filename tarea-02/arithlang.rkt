@@ -40,7 +40,6 @@
                  [(-) (bminusS (parse (second ls)) (parse (third ls)))]
                  [else (error 'parse "operación aritmética malformada")])))]
         [else (error 'parse "expresión aritmética malformada")]))
->>>>>>> workprocess
 
 (define (eval [input : S-Exp]) : Number
   (interp (desugar (parse input))))
