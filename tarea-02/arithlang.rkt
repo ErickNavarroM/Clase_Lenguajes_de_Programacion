@@ -2,7 +2,10 @@
 #lang plait
 
 ;; Problema 1
+<<<<<<< HEAD
 
+=======
+>>>>>>> f0578483188e8cdbf53e0355dff6b1ac8eaf5e63
 (define (interp [c : ArithC]) : Number
   (type-case ArithC c
     [(numC n) n]
