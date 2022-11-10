@@ -1,0 +1,43 @@
+\documentclass[14pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+
+\title{\textbf{Tarea 07 - Lenguajes de Programación}}
+\author{Navarro Meléndrez Erick Joel}
+\begin{document}
+	   
+	\maketitle
+	\textbf{Sintaxis concreta}
+	\\
+	\\\textit{Expression} ::= \textit{Number}
+	\\\textit{Expression} ::= -(\textit{Expression}, \textit{Expression})
+	\\\textit{Expression} ::= \textbf{zero?}(\textit{Expression})
+	\\\textit{Expression} ::= \textbf{if} \textit{Expression} \textbf{then} \textit{Expression} \textbf{else} \textit{Expression}
+	\\\textit{Expression} ::= \textbf{Identifier}
+	\\\textit{Expression} ::= \textbf{let} \textit{Identifier} = \textit{Expression} \textbf{in} \textit{Expression}
+	\\\\
+	\textbf{Sintaxis abstracta}
+	\\
+	\\(const-exp \textit{num})
+	\\(diff-exp \textit{exp1 exp2})
+	\\(zero?-exp \textit{exp1})
+	\\(if-exp \textit{exp1 exp2 exp3})
+	\\(var-exp \textit{var})
+	\\(let-exp \textit{var exp1 body})
+	\\\\ 
+	\textbf{Interpretación del lenguaje:}
+	\\\\
+	(value-of (const-exp $n$) $\rho$) = (num-val $n$)
+	\\\\
+	(value-of (var-exp $var$) $\rho$) = $\rho$($var$)
+	\\\\
+	(value-of (diff-exp \textit{exp1} \textit{exp2}) $\rho$)\\ = (num-val (- (expval$\rightarrow$num (value-of \textit{exp1} $\rho$))(expval$\rightarrow$num (value-of $exp2$ $\rho$))))
+	\\\\
+	(value-of (zero?-exp \textit{exp1}) $\rho$)\\ = (\textbf{let} ([$val1$ (value-of $exp1$ $\rho$)]) (bool-val (= 0 (expval$\rightarrow$num $val1$))))
+	\\\\
+	(value-of (if-exp \textit{exp1} \textit{exp2} \textit{exp3}) $\rho$)\\ = (\textbf{if} (expval$\rightarrow$bool (value-of \textit{exp1} $\rho$)) (value-of \textit{exp2} $\rho$) (value-of \textit{exp3} $\rho$))
+	\\\\
+	(value-of (let-exp \textit{var} \textit{exp1} \textit{body}) $\rho$)\\ = (\textbf{let} ([$val1$ (value-of \textit{exp1} $\rho$)]) (value-of \textit{body} [\textit{var} $=$ \textit{val1}]$\rho$))
+	\\\\
+\end{document}
+
